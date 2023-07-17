@@ -1,12 +1,17 @@
 'use client';
 
-import { ChangeEvent, SyntheticEvent, useState } from 'react';
+import { ChangeEvent, SyntheticEvent, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import Loading from '@/components/Loading';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const RegisterPage = () => {
+  const session = useSession();
+  const router = useRouter();
+
   const [registerData, setRegisterData] = useState({
     name: '',
     email: '',
@@ -14,6 +19,12 @@ const RegisterPage = () => {
     password2: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (session?.status === 'authenticated') {
+      router.push('/dashboard');
+    }
+  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
