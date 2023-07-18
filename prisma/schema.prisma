@@ -44,6 +44,9 @@ model User {
   emailVerified DateTime?
   hashedPassword String?
   image         String?
+  profile       Profile?
+  role          Role      @default(USER)
+  companies     Company[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   
@@ -58,3 +61,72 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Profile {
+  id          String    @id @default(cuid())
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id])
+  bio         String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+enum Role {
+  USER
+  EMPLOYER
+  ADMIN 
+}
+
+model Company {
+  id            String    @id @default(cuid())
+  name          String
+  logo          String?
+  desc          String?
+  industry      String?
+  capacity      Int?
+  address       String?
+  city          String?
+  state         String?
+  zip           String?
+  ownerId       String
+  owner         User      @relation(fields: [ownerId], references: [id])
+  jobs          Job[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([ownerId])
+}
+
+model Category {
+  id            String    @id @default(cuid())
+  name          String
+  jobs          Job[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt  
+}
+
+model Job {
+  id            String    @id @default(cuid())
+  name          String
+  description   String
+  requirement   String
+  location      String?
+  salary        String?
+  type          String?
+  workType      String?
+  schedule      String?
+  benefit       String?
+  startDate     String?
+  status        Boolean   @default(true)
+  companyId     String
+  company       Company   @relation(fields: [companyId], references: [id])
+  categoryId    String
+  category      Category  @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([companyId, categoryId])
+}
+
