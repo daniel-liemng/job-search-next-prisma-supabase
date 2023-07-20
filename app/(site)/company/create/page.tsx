@@ -1,5 +1,4 @@
-import CreateCompanyForm from '@/components/company/CreateCompanyForm';
-import React from 'react';
+import CreateCompanyForm from '@/components/employer/CreateCompanyForm';
 
 const CreateCompany = () => {
   return (
