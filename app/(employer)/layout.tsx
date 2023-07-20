@@ -1,4 +1,3 @@
-import EmployerNavbar from '@/components/employer/layout/EmployerNavbar';
 import EmployerSidebar from '@/components/employer/layout/EmployerSidebar';
 
 const EmployerLayout = ({ children }: { children: React.ReactNode }) => {

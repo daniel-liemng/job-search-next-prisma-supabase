@@ -10,6 +10,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { HiPlus } from 'react-icons/hi';
+import { useState } from 'react';
 
 import {
   Table,
@@ -19,11 +21,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Category } from '@/types/category';
-import { HiPlus } from 'react-icons/hi';
+import CategoryFormModal from './CategoryFormModal';
+import { useCategoryModal } from '@/hooks/useCategoryModal';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -34,11 +36,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [openCatFormModal, setOpenCatFormModal] = useState<
-    boolean | undefined
-  >();
-
-  const [selectedCat, setSelectedCat] = useState<Category | undefined>();
+  const { onOpen } = useCategoryModal();
 
   const [rowSelection, setRowSelection] = useState({});
 
@@ -74,7 +72,7 @@ export function DataTable<TData, TValue>({
             table.getColumn('name')?.setFilterValue(event.target.value)
           }
         />
-        <Button onClick={() => setOpenCatFormModal(false)} variant='outline'>
+        <Button onClick={onOpen} variant='outline'>
           <HiPlus className='mr-2 h-5 w-5' />
           <p>Add category</p>
         </Button>
@@ -134,6 +132,8 @@ export function DataTable<TData, TValue>({
         {table.getFilteredSelectedRowModel().rows.length} of{' '}
         {table.getFilteredRowModel().rows.length} row(s) selected.
       </div>
+
+      <CategoryFormModal />
     </>
   );
 }

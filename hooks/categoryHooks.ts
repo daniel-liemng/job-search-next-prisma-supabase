@@ -15,6 +15,17 @@ export const useGetAllCategories = () =>
 
 export const useUpdateCategoryMutation = () =>
   useMutation({
-    mutationFn: async ({ catId, name }: { catId: string; name: string }) =>
-      (await axios.put(`/api/category/${catId}`, { name })).data,
+    mutationFn: async ({
+      catId,
+      name,
+    }: {
+      catId: string | undefined;
+      name: string | undefined;
+    }) => (await axios.put(`/api/category/${catId}`, { name })).data,
+  });
+
+export const useGetCategoryQuery = (id: string) =>
+  useQuery({
+    queryKey: ['cat', id],
+    queryFn: async () => (await axios.get(`/api/category/${id}`)).data,
   });

@@ -24,3 +24,21 @@ export const PUT = async (
     return new NextResponse('Internal Error', { status: 500 });
   }
 };
+
+export const GET = async (
+  request: Request,
+  { params }: { params: { catId: string } }
+) => {
+  try {
+    const category = await prisma.category.findFirst({
+      where: {
+        id: params.catId,
+      },
+    });
+
+    return NextResponse.json(category);
+  } catch (err) {
+    console.log(`Cat-Put Error: ${err}`);
+    return new NextResponse('Internal Error', { status: 500 });
+  }
+};
