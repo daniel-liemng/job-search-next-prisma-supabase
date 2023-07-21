@@ -1,21 +1,24 @@
 'use client';
 
 import Loading from '@/components/Loading';
-import { columns } from '@/components/employer/category/Columns';
-import { DataTable } from '@/components/employer/category/DataTable';
+import { columns } from '@/components/employer/company/Columns';
+import { DataTable } from '@/components/employer/company/DataTable';
+
 import Breadcrumb from '@/components/shared/Breadcrumb';
 import Heading from '@/components/shared/Heading';
 import { Button } from '@/components/ui/button';
-import { useGetAllCategories } from '@/hooks/useCategoryHooks';
-import { Category } from '@/types/category';
+
+import { useGetAllCompanies } from '@/hooks/useCompanyHooks';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 import { HiPlus } from 'react-icons/hi';
 
 const EmployerCompanyPage = () => {
-  // if (error) {
-  //   toast.error('Something went wrong');
-  // }
+  const { data: companies, isLoading, error } = useGetAllCompanies();
+
+  if (error) {
+    toast.error('Something went wrong');
+  }
 
   return (
     <div className='p-5'>
@@ -30,11 +33,13 @@ const EmployerCompanyPage = () => {
         </div>
       </Button>
 
-      {/* {convertedCategories && (
-        <div className='mt-6'>
-          <DataTable columns={columns} data={convertedCategories} />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <div className='mx-auto pt-6'>
+          <DataTable columns={columns} data={companies} />
         </div>
-      )} */}
+      )}
     </div>
   );
 };

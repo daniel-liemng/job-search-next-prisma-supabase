@@ -7,5 +7,11 @@ export const useCreateCompanyMutation = () =>
   useMutation({
     mutationFn: async (companyData: ICompany) =>
       (await axios.post('/api/company', companyData)).data,
-    // onSuccess: () => queryClient.invalidateQueries(['all-cat']),
+    onSuccess: () => queryClient.invalidateQueries(['all-com']),
+  });
+
+export const useGetAllCompanies = () =>
+  useQuery({
+    queryKey: ['all-com'],
+    queryFn: async () => (await axios.get('/api/company')).data,
   });

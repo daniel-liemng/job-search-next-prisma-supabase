@@ -2,6 +2,7 @@
 
 import {
   ColumnDef,
+  VisibilityState,
   ColumnFiltersState,
   SortingState,
   flexRender,
@@ -10,7 +11,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { HiPlus } from 'react-icons/hi';
+
 import { useState } from 'react';
 
 import {
@@ -21,11 +22,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import CategoryFormModal from './CategoryFormModal';
-import { useCategoryModal } from '@/hooks/useCategoryModal';
-import CategoryDeleteModal from './CategoryDeleteModal';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -36,13 +40,13 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const { onFormOpen } = useCategoryModal();
-
   const [rowSelection, setRowSelection] = useState({});
 
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   const table = useReactTable({
     data,
@@ -53,29 +57,54 @@ export function DataTable<TData, TValue>({
     onRowSelectionChange: setRowSelection,
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
     state: {
       rowSelection,
       sorting,
       columnFilters,
+      columnVisibility,
     },
   });
 
   return (
     <>
-      <div className='w-full flex justify-between items-center'>
+      <div className='flex items-center py-1'>
         <Input
           type='text'
-          placeholder='Search category'
+          placeholder='Search company'
           className='max-w-md'
           value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
             table.getColumn('name')?.setFilterValue(event.target.value)
           }
         />
-        <Button onClick={onFormOpen} variant='outline'>
-          <HiPlus className='mr-2 h-5 w-5' />
-          <p>Add category</p>
-        </Button>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant='outline' className='ml-auto'>
+              Columns
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end'>
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className='capitalize'
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div className='rounded-md border mt-6'>
@@ -132,9 +161,6 @@ export function DataTable<TData, TValue>({
         {table.getFilteredSelectedRowModel().rows.length} of{' '}
         {table.getFilteredRowModel().rows.length} row(s) selected.
       </div>
-
-      <CategoryFormModal />
-      <CategoryDeleteModal />
     </>
   );
 }
