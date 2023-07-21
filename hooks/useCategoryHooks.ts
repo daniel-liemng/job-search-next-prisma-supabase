@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+
 import { queryClient } from '@/context/ReactQueryProvider';
 
 export const useCreateCategoryMutation = () =>

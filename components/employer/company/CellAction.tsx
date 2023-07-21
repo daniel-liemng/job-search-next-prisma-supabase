@@ -17,12 +17,17 @@ import {
 import { CompanyColumn } from './Columns';
 
 import { Button } from '@/components/ui/button';
+import { useCompanyModal } from '@/hooks/useCompanyModal';
 
 interface CellActionProps {
   data: CompanyColumn;
 }
 
 const CellAction: React.FC<CellActionProps> = ({ data }) => {
+  const { onDelete } = useCompanyModal();
+
+  console.log('dada', data);
+
   return (
     <div>
       <DropdownMenu>
@@ -50,7 +55,7 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </DropdownMenuItem>
 
           <DropdownMenuItem>
-            <div className='flex items-center'>
+            <div onClick={() => onDelete(data)} className='flex items-center'>
               <HiOutlineTrash className='mr-2 w-5 h-5' />
               Delete
             </div>

@@ -56,7 +56,7 @@ export const DELETE = async (
 
     return new NextResponse('Category Deleted');
   } catch (err) {
-    console.log(`Cat-Put Error: ${err}`);
+    console.log(`Cat-Delete Error: ${err}`);
     return new NextResponse('Internal Error', { status: 500 });
   }
 };
