@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -21,6 +20,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Image from 'next/image';
 import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'react-hot-toast';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useCreateCompanyMutation } from '@/hooks/useCompanyHooks';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -32,7 +36,8 @@ const formSchema = z.object({
   capacity: z.string().min(1, {
     message: 'Capacity is required.',
   }),
-  description: z.string(),
+  url: z.string(),
+  desc: z.string(),
   address: z.string().min(1, {
     message: 'Address is required.',
   }),
@@ -48,6 +53,16 @@ const formSchema = z.object({
 });
 
 const CompanyForm = () => {
+  const { data: session } = useSession();
+
+  const router = useRouter();
+
+  const {
+    mutateAsync: createComapny,
+    isLoading,
+    error,
+  } = useCreateCompanyMutation();
+
   const [file, setFile] = useState<File>();
   const [logoUrl, setLogoUrl] = useState<string>();
 
@@ -55,19 +70,26 @@ const CompanyForm = () => {
     // upload image
     const filename = `${uuidv4()}-${file?.name}`;
 
-    const { data, error } = await supabase.storage
-      .from('company-image')
-      .upload(filename, file, {
-        cacheControl: '3600',
-        upsert: false,
-      });
+    if (file) {
+      const { data, error } = await supabase.storage
+        .from('company-image')
+        .upload(filename, file, {
+          cacheControl: '3600',
+          upsert: false,
+        });
 
-    if (error) {
-      console.log(`Supabase upload error: ${error}`);
+      if (error) {
+        console.log(`Supabase upload error: ${error}`);
+        return toast.error('Failed to upload image');
+      }
+
+      const newFilename = data?.path;
+      setLogoUrl(
+        `${process.env.NEXT_PUBLIC_SUPABASE_BUCKET_URL}/${newFilename}`
+      );
+    } else {
+      return toast.error('Please select the company logo');
     }
-
-    const newFilename = data?.path;
-    setLogoUrl(`${process.env.NEXT_PUBLIC_SUPABASE_BUCKET_URL}/${newFilename}`);
   };
 
   const handleFileSelected = (e: ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +104,8 @@ const CompanyForm = () => {
       name: '',
       industry: '',
       capacity: '',
-      description: '',
+      url: '',
+      desc: '',
       address: '',
       city: '',
       state: '',
@@ -90,9 +113,28 @@ const CompanyForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);
+    if (!logoUrl) {
+      return toast.error('Please select the company logo');
+    }
+
+    await createComapny({
+      ...values,
+      ownerId: session?.user?.id,
+      logo: logoUrl,
+    });
+
+    toast.success('Company Created');
+    form.reset();
+    router.push('/employer/company');
   };
+
+  console.log(session);
+
+  if (error) {
+    toast.error('Failed to save company');
+  }
 
   return (
     <>
@@ -142,6 +184,24 @@ const CompanyForm = () => {
                   )}
                 />
               </div>
+
+              <div className='col-span-2'>
+                <FormField
+                  control={form.control}
+                  name='url'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Website URL</FormLabel>
+                      <FormControl>
+                        <Input placeholder='Website URL' {...field} />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <div className='col-span-2 md:col-span-1'>
                 <FormField
                   control={form.control}
@@ -157,6 +217,7 @@ const CompanyForm = () => {
                   )}
                 />
               </div>
+
               <div className='col-span-2 md:col-span-1'>
                 <FormField
                   control={form.control}
@@ -173,10 +234,11 @@ const CompanyForm = () => {
                   )}
                 />
               </div>
+
               <div className='col-span-2'>
                 <FormField
                   control={form.control}
-                  name='description'
+                  name='desc'
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Description</FormLabel>
@@ -192,6 +254,7 @@ const CompanyForm = () => {
                   )}
                 />
               </div>
+
               <div className='col-span-2 md:col-span-1'>
                 <FormField
                   control={form.control}
@@ -207,6 +270,7 @@ const CompanyForm = () => {
                   )}
                 />
               </div>
+
               <div className='col-span-2 md:col-span-1'>
                 <FormField
                   control={form.control}
@@ -222,6 +286,7 @@ const CompanyForm = () => {
                   )}
                 />
               </div>
+
               <div className='col-span-2 md:col-span-1'>
                 <FormField
                   control={form.control}
@@ -237,6 +302,7 @@ const CompanyForm = () => {
                   )}
                 />
               </div>
+
               <div className='col-span-2 md:col-span-1'>
                 <FormField
                   control={form.control}
@@ -254,9 +320,14 @@ const CompanyForm = () => {
               </div>
             </div>
 
-            <Button type='submit' className='mt-5'>
-              Submit
-            </Button>
+            <div className='flex justify-end items-center gap-2 mt-5'>
+              <Button type='button' variant='outline' asChild>
+                <Link href='/employer/company'>Cancel</Link>
+              </Button>
+              <Button type='submit' disabled={isLoading}>
+                Save
+              </Button>
+            </div>
           </form>
         </Form>
       </div>

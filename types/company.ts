@@ -1,12 +1,14 @@
 export interface ICompany {
-  id: number;
-  title: string;
+  id?: string;
+  logo?: string;
+  name: string;
   industry: string;
-  size: string;
-  url: string;
+  capacity: string;
+  url?: string;
+  desc?: string;
   address: string;
   city: string;
   state: string;
   zip: string;
-  owner: string;
+  ownerId: string;
 }

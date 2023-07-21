@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,20 +8,19 @@ datasource db {
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -38,20 +34,19 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  image          String?
+  createdAt      DateTime  @default(now())
   hashedPassword String?
-  image         String?
-  profile       Profile?
-  role          Role      @default(USER)
-  companies     Company[]
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
-  accounts      Account[]
-  sessions      Session[]
+  updatedAt      DateTime  @updatedAt
+  role           Role      @default(USER)
+  accounts       Account[]
+  companies      Company[]
+  profile        Profile?
+  sessions       Session[]
 }
 
 model VerificationToken {
@@ -63,70 +58,70 @@ model VerificationToken {
 }
 
 model Profile {
-  id          String    @id @default(cuid())
-  userId      String    @unique
-  user        User      @relation(fields: [userId], references: [id])
-  bio         String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  bio       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
 
-enum Role {
-  USER
-  EMPLOYER
-  ADMIN 
-}
-
 model Company {
-  id            String    @id @default(cuid())
-  name          String
-  logo          String?
-  desc          String?
-  industry      String?
-  capacity      String?
-  address       String?
-  city          String?
-  state         String?
-  zip           String?
-  ownerId       String
-  owner         User      @relation(fields: [ownerId], references: [id])
-  jobs          Job[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        String   @id @default(cuid())
+  name      String
+  logo      String?
+  capacity  String?
+  desc      String?
+  industry  String?  
+  address   String?
+  city      String?
+  state     String?
+  zip       String?
+  ownerId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  url       String?
+  owner     User     @relation(fields: [ownerId], references: [id])
+  jobs      Job[]
 
   @@index([ownerId])
 }
 
 model Category {
-  id            String    @id @default(cuid())
-  name          String
-  jobs          Job[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt  
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  jobs      Job[]
 }
 
 model Job {
-  id            String    @id @default(cuid())
-  name          String
-  description   String
-  requirement   String
-  location      String?
-  salary        String?
-  type          String?
-  workType      String?
-  schedule      String?
-  benefit       String?
-  startDate     String?
-  status        Boolean   @default(true)
-  companyId     String
-  company       Company   @relation(fields: [companyId], references: [id])
-  categoryId    String
-  category      Category  @relation(fields: [categoryId], references: [id])
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  requirement String
+  location    String?
+  salary      String?
+  type        String?
+  workType    String?
+  schedule    String?
+  benefit     String?
+  startDate   String?
+  status      Boolean  @default(true)
+  companyId   String
+  categoryId  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  category    Category @relation(fields: [categoryId], references: [id])
+  company     Company  @relation(fields: [companyId], references: [id])
 
   @@index([companyId, categoryId])
 }
 
+enum Role {
+  USER
+  EMPLOYER
+  ADMIN
+}
