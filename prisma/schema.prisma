@@ -85,7 +85,7 @@ model Company {
   logo          String?
   desc          String?
   industry      String?
-  capacity      Int?
+  capacity      String?
   address       String?
   city          String?
   state         String?
