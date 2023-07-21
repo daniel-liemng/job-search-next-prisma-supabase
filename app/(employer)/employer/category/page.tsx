@@ -4,7 +4,8 @@ import Loading from '@/components/Loading';
 import { columns } from '@/components/employer/category/Columns';
 import { DataTable } from '@/components/employer/category/DataTable';
 import Breadcrumb from '@/components/shared/Breadcrumb';
-import { useGetAllCategories } from '@/hooks/categoryHooks';
+import Heading from '@/components/shared/Heading';
+import { useGetAllCategories } from '@/hooks/useCategoryHooks';
 import { Category } from '@/types/category';
 import { toast } from 'react-hot-toast';
 
@@ -23,11 +24,10 @@ const EmployerCategoryPage = () => {
   return (
     <div className='p-5'>
       <Breadcrumb name='Category' />
-      <h2 className='text-3xl text-gray-900 my-6 font-semibold'>
-        All categories
-      </h2>
 
-      {isLoading && <Loading />}
+      <Heading title='Category' description='Manage all categories' />
+
+      {/* {isLoading && <Loading />} */}
 
       {convertedCategories && (
         <div className='mt-6'>

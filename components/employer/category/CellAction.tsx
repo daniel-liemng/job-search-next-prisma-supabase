@@ -9,23 +9,20 @@ interface CellActionProps {
 }
 
 const CellAction: React.FC<CellActionProps> = ({ data }) => {
-  const { onEdit, onOpen } = useCategoryModal();
+  const { onEdit, onDelete } = useCategoryModal();
 
   return (
     <div>
       <Button
         type='button'
-        onClick={() => {
-          onEdit(data);
-          onOpen();
-        }}
+        onClick={() => onEdit(data)}
         variant='outline'
         className='mr-2'
       >
         <HiOutlinePencilAlt className='mr-2 w-5 h-5' />
         Edit
       </Button>
-      <Button variant='outline'>
+      <Button type='button' onClick={() => onDelete(data)} variant='outline'>
         <HiOutlineTrash className='mr-2 w-5 h-5' />
         Delete
       </Button>

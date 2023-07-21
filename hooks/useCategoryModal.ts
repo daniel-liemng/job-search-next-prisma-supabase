@@ -2,20 +2,31 @@ import { Category } from '@/types/category';
 import { create } from 'zustand';
 
 interface useCategoryModalStore {
-  isOpen: boolean;
+  isFormOpen: boolean;
+  isDeleteOpen: boolean;
   isEdit?: boolean;
   editItem?: Category;
-  onOpen: () => void;
+  deleteItem?: Category;
+  onFormOpen: () => void;
+  onFormClose: () => void;
+  onDeleteOpen: () => void;
+  onDeleteClose: () => void;
   onEdit: (category: Category) => void;
-  onClose: () => void;
+  onDelete: (category: Category) => void;
 }
 
 export const useCategoryModal = create<useCategoryModalStore>((set) => ({
-  isOpen: false,
+  isFormOpen: false,
+  isDeleteOpen: false,
   isEdit: false,
   editId: undefined,
-  onOpen: () => set({ isOpen: true }),
+  onFormOpen: () => set({ isFormOpen: true }),
+  onFormClose: () =>
+    set({ isFormOpen: false, isEdit: false, editItem: undefined }),
   onEdit: (category: Category) =>
-    set({ isOpen: true, isEdit: true, editItem: category }),
-  onClose: () => set({ isOpen: false, isEdit: false, editItem: undefined }),
+    set({ isFormOpen: true, isEdit: true, editItem: category }),
+  onDeleteOpen: () => set({ isDeleteOpen: true }),
+  onDeleteClose: () => set({ isDeleteOpen: false, deleteItem: undefined }),
+  onDelete: (category: Category) =>
+    set({ isDeleteOpen: true, deleteItem: category }),
 }));

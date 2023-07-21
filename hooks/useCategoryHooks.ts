@@ -1,10 +1,12 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { queryClient } from '@/context/ReactQueryProvider';
 
 export const useCreateCategoryMutation = () =>
   useMutation({
     mutationFn: async (catData: { name: string }) =>
       (await axios.post('/api/category', catData)).data,
+    onSuccess: () => queryClient.invalidateQueries(['all-cat']),
   });
 
 export const useGetAllCategories = () =>
@@ -22,6 +24,14 @@ export const useUpdateCategoryMutation = () =>
       catId: string | undefined;
       name: string | undefined;
     }) => (await axios.put(`/api/category/${catId}`, { name })).data,
+    onSuccess: () => queryClient.invalidateQueries(['all-cat']),
+  });
+
+export const useDeleteCategoryMutation = () =>
+  useMutation({
+    mutationFn: async (catId: string) =>
+      (await axios.delete(`/api/category/${catId}`)).data,
+    onSuccess: () => queryClient.invalidateQueries(['all-cat']),
   });
 
 export const useGetCategoryQuery = (id: string) =>

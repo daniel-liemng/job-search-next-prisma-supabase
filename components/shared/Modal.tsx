@@ -4,7 +4,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Separator } from '../ui/separator';
 
 interface ModalProps {
   title: string;

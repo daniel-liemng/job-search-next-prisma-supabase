@@ -26,6 +26,7 @@ import { Button } from '@/components/ui/button';
 import { Category } from '@/types/category';
 import CategoryFormModal from './CategoryFormModal';
 import { useCategoryModal } from '@/hooks/useCategoryModal';
+import CategoryDeleteModal from './CategoryDeleteModal';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -36,7 +37,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const { onOpen } = useCategoryModal();
+  const { onFormOpen } = useCategoryModal();
 
   const [rowSelection, setRowSelection] = useState({});
 
@@ -72,7 +73,7 @@ export function DataTable<TData, TValue>({
             table.getColumn('name')?.setFilterValue(event.target.value)
           }
         />
-        <Button onClick={onOpen} variant='outline'>
+        <Button onClick={onFormOpen} variant='outline'>
           <HiPlus className='mr-2 h-5 w-5' />
           <p>Add category</p>
         </Button>
@@ -134,6 +135,7 @@ export function DataTable<TData, TValue>({
       </div>
 
       <CategoryFormModal />
+      <CategoryDeleteModal />
     </>
   );
 }

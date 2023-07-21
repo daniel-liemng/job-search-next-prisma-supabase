@@ -3,9 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   useCreateCategoryMutation,
-  useGetCategoryQuery,
   useUpdateCategoryMutation,
-} from '@/hooks/categoryHooks';
+} from '@/hooks/useCategoryHooks';
 import { useCategoryModal } from '@/hooks/useCategoryModal';
 import { Label } from '@radix-ui/react-label';
 import { useState } from 'react';
@@ -17,7 +16,7 @@ interface CategoryFormModalProps {
 }
 
 const CategoryFormModal: React.FC<CategoryFormModalProps> = ({}) => {
-  const { isOpen, onClose, editItem, isEdit } = useCategoryModal();
+  const { isFormOpen, onFormClose, editItem, isEdit } = useCategoryModal();
 
   const { mutateAsync: createCategory } = useCreateCategoryMutation();
   const { mutateAsync: updateCategory } = useUpdateCategoryMutation();
@@ -33,14 +32,14 @@ const CategoryFormModal: React.FC<CategoryFormModalProps> = ({}) => {
 
     toast.success(isEdit ? 'Category Updated' : 'Category Created');
     setName('');
-    onClose();
+    onFormClose();
   };
 
   return (
     <Modal
       title={isEdit ? 'Update category' : 'Create category'}
-      isOpen={isOpen}
-      onClose={onClose}
+      isOpen={isFormOpen}
+      onClose={onFormClose}
     >
       <div className='space-y-3'>
         <Label htmlFor='name'>Name</Label>

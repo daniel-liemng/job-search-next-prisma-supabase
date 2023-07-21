@@ -42,3 +42,21 @@ export const GET = async (
     return new NextResponse('Internal Error', { status: 500 });
   }
 };
+
+export const DELETE = async (
+  request: Request,
+  { params }: { params: { catId: string } }
+) => {
+  try {
+    await prisma.category.delete({
+      where: {
+        id: params.catId,
+      },
+    });
+
+    return new NextResponse('Category Deleted');
+  } catch (err) {
+    console.log(`Cat-Put Error: ${err}`);
+    return new NextResponse('Internal Error', { status: 500 });
+  }
+};
