@@ -18,8 +18,6 @@ import { Button } from '@/components/ui/button';
 import { useCompanyModal } from '@/hooks/useCompanyModal';
 import { Company } from '@/types/company';
 import Link from 'next/link';
-// import { CompanyColumn } from './Columns';
-
 interface CellActionProps {
   data: Company;
 }

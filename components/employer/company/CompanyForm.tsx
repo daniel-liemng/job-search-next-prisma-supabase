@@ -67,13 +67,13 @@ const CompanyForm = () => {
   const { selectedItem, onResetSelectetedItem } = useCompanyModal();
 
   const {
-    mutateAsync: createComapny,
+    mutateAsync: createCompany,
     isLoading,
     error,
   } = useCreateCompanyMutation();
 
   const {
-    mutateAsync: updateComapny,
+    mutateAsync: updateCompany,
     isLoading: isUpdateLoading,
     error: isUpdateError,
   } = useUpdateCompanyMutation();
@@ -130,39 +130,33 @@ const CompanyForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
     if (!logoUrl) {
       return toast.error('Please select the company logo');
     }
 
     if (isEdit) {
-      await updateComapny({
+      await updateCompany({
         ...values,
         ownerId: session?.user?.id,
         logo: logoUrl,
         id: selectedItem?.id,
       });
     } else {
-      await createComapny({
+      await createCompany({
         ...values,
         ownerId: session?.user?.id,
         logo: logoUrl,
       });
     }
 
-    toast.success('Company Created');
+    toast.success(selectedItem ? 'Company Updated' : 'Company Created');
     form.reset();
     router.push('/employer/company');
   };
 
-  console.log(session);
-
   if (error) {
     toast.error('Failed to save company');
   }
-
-  console.log('444', selectedItem);
-  console.log('555', isEdit);
 
   return (
     <>
@@ -209,7 +203,7 @@ const CompanyForm = () => {
                     <FormItem>
                       <FormLabel>Name</FormLabel>
                       <FormControl>
-                        <Input placeholder='Comapany name' {...field} />
+                        <Input placeholder='Company name' {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
