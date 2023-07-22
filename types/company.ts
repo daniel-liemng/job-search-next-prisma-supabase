@@ -1,4 +1,4 @@
-export interface Company {
+export type Company = {
   id?: string;
   logo?: string;
   name: string;
@@ -11,7 +11,7 @@ export interface Company {
   state: string;
   zip: string;
   ownerId: string;
-}
+};
 
 export interface ShortCompany {
   id: string;

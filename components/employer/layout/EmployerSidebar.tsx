@@ -25,7 +25,7 @@ const EmployerSidebar = ({
     {
       href: `/employer/dashboard`,
       label: 'Overview',
-      active: pathname === `/employer/dashboard`,
+      active: pathname.includes(`/employer/dashboard`),
       icon: <HiOutlineChartSquareBar className='h-6 w-6' />,
     },
     {
@@ -37,13 +37,13 @@ const EmployerSidebar = ({
     {
       href: `/employer/category`,
       label: 'Category',
-      active: pathname === `/employer/category`,
+      active: pathname.includes(`/employer/category`),
       icon: <HiOutlineCollection className='h-6 w-6' />,
     },
     {
       href: `/employer/job`,
       label: 'Job',
-      active: pathname === `/employer/job`,
+      active: pathname.includes(`/employer/job`),
       icon: <HiOutlineCube className='h-6 w-6' />,
     },
     {

@@ -43,6 +43,9 @@ import {
 } from '@/components/ui/select';
 import { Calendar } from '@/components/ui/calendar';
 import { CalendarIcon } from 'lucide-react';
+import { Job } from '@/types/job';
+import { useGetAllCategories } from '@/hooks/useCategoryHooks';
+import { Category } from '@/types/category';
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -90,19 +93,21 @@ const JobForm = () => {
   const searchParams = useSearchParams();
   const isEdit = searchParams.get('isEdit');
 
-  const { selectedItem, onResetSelectetedItem } = useCompanyModal();
+  const { data: categories } = useGetAllCategories();
 
-  const {
-    mutateAsync: createComapny,
-    isLoading,
-    error,
-  } = useCreateCompanyMutation();
+  let selectedItem: Job = {};
 
-  const {
-    mutateAsync: updateComapny,
-    isLoading: isUpdateLoading,
-    error: isUpdateError,
-  } = useUpdateCompanyMutation();
+  // const {
+  //   mutateAsync: createComapny,
+  //   isLoading,
+  //   error,
+  // } = useCreateCompanyMutation();
+
+  // const {
+  //   mutateAsync: updateComapny,
+  //   isLoading: isUpdateLoading,
+  //   error: isUpdateError,
+  // } = useUpdateCompanyMutation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -136,9 +141,9 @@ const JobForm = () => {
     // router.push('/employer/job');
   };
 
-  if (error) {
-    toast.error('Failed to save job');
-  }
+  // if (error) {
+  //   toast.error('Failed to save job');
+  // }
 
   return (
     <>
@@ -375,8 +380,11 @@ const JobForm = () => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value='active'>Active</SelectItem>
-                          <SelectItem value='inactive'>Inactive</SelectItem>
+                          {categories?.map((cat: Category) => (
+                            <SelectItem value={cat.id} key={cat.id}>
+                              {cat.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -434,17 +442,10 @@ const JobForm = () => {
             </div>
 
             <div className='flex justify-end items-center gap-2 mt-5'>
-              <Button
-                onClick={onResetSelectetedItem}
-                type='button'
-                variant='outline'
-                asChild
-              >
+              <Button type='button' variant='outline' asChild>
                 <Link href='/employer/job'>Cancel</Link>
               </Button>
-              <Button type='submit' disabled={isLoading}>
-                Save
-              </Button>
+              <Button type='submit'>Save</Button>
             </div>
           </form>
         </Form>
