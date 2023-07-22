@@ -23,8 +23,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { useCreateCompanyMutation } from '@/hooks/useCompanyHooks';
-import { useRouter } from 'next/navigation';
+import {
+  useCreateCompanyMutation,
+  useUpdateCompanyMutation,
+} from '@/hooks/useCompanyHooks';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useCompanyModal } from '@/hooks/useCompanyModal';
+import Heading from '@/components/shared/Heading';
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -56,6 +61,10 @@ const CompanyForm = () => {
   const { data: session } = useSession();
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isEdit = searchParams.get('isEdit');
+
+  const { selectedItem, onResetSelectetedItem } = useCompanyModal();
 
   const {
     mutateAsync: createComapny,
@@ -63,8 +72,14 @@ const CompanyForm = () => {
     error,
   } = useCreateCompanyMutation();
 
+  const {
+    mutateAsync: updateComapny,
+    isLoading: isUpdateLoading,
+    error: isUpdateError,
+  } = useUpdateCompanyMutation();
+
   const [file, setFile] = useState<File>();
-  const [logoUrl, setLogoUrl] = useState<string>();
+  const [logoUrl, setLogoUrl] = useState<string>(selectedItem?.logo || '');
 
   const handleUploadFile = async () => {
     // upload image
@@ -83,6 +98,7 @@ const CompanyForm = () => {
         return toast.error('Failed to upload image');
       }
 
+      toast.success('Image Uploaded');
       const newFilename = data?.path;
       setLogoUrl(
         `${process.env.NEXT_PUBLIC_SUPABASE_BUCKET_URL}/${newFilename}`
@@ -101,15 +117,15 @@ const CompanyForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      industry: '',
-      capacity: '',
-      url: '',
-      desc: '',
-      address: '',
-      city: '',
-      state: '',
-      zip: '',
+      name: isEdit ? selectedItem?.name : '',
+      industry: isEdit ? selectedItem?.industry : '',
+      capacity: isEdit ? selectedItem?.capacity : '',
+      url: isEdit ? selectedItem?.url : '',
+      desc: isEdit ? selectedItem?.desc : '',
+      address: isEdit ? selectedItem?.address : '',
+      city: isEdit ? selectedItem?.city : '',
+      state: isEdit ? selectedItem?.state : '',
+      zip: isEdit ? selectedItem?.zip : '',
     },
   });
 
@@ -119,11 +135,20 @@ const CompanyForm = () => {
       return toast.error('Please select the company logo');
     }
 
-    await createComapny({
-      ...values,
-      ownerId: session?.user?.id,
-      logo: logoUrl,
-    });
+    if (isEdit) {
+      await updateComapny({
+        ...values,
+        ownerId: session?.user?.id,
+        logo: logoUrl,
+        id: selectedItem?.id,
+      });
+    } else {
+      await createComapny({
+        ...values,
+        ownerId: session?.user?.id,
+        logo: logoUrl,
+      });
+    }
 
     toast.success('Company Created');
     form.reset();
@@ -136,8 +161,15 @@ const CompanyForm = () => {
     toast.error('Failed to save company');
   }
 
+  console.log('444', selectedItem);
+  console.log('555', isEdit);
+
   return (
     <>
+      <Heading
+        title={selectedItem ? 'Update company' : 'Create company'}
+        description={selectedItem ? 'Update a company' : 'Create a new company'}
+      />
       <div className='mt-5 flex gap-5'>
         <div className='grid w-full max-w-sm items-center gap-2'>
           <Label htmlFor='logo'>Logo</Label>
@@ -148,19 +180,19 @@ const CompanyForm = () => {
               name='logo'
               onChange={handleFileSelected}
             />
-            <Button type='button' onClick={handleUploadFile} variant='outline'>
+            <Button type='button' onClick={handleUploadFile}>
               Upload
             </Button>
           </div>
         </div>
 
-        {logoUrl && (
+        {(logoUrl || (isEdit && selectedItem?.logo)) && (
           <Image
-            src={logoUrl}
+            src={selectedItem?.logo! || logoUrl!}
             alt='logo'
             width={100}
             height={100}
-            className='rounded-full object-cover'
+            className='rounded-full object-cover border border-gray-300'
           />
         )}
       </div>
@@ -321,7 +353,12 @@ const CompanyForm = () => {
             </div>
 
             <div className='flex justify-end items-center gap-2 mt-5'>
-              <Button type='button' variant='outline' asChild>
+              <Button
+                onClick={onResetSelectetedItem}
+                type='button'
+                variant='outline'
+                asChild
+              >
                 <Link href='/employer/company'>Cancel</Link>
               </Button>
               <Button type='submit' disabled={isLoading}>

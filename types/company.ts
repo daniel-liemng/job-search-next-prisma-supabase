@@ -1,4 +1,4 @@
-export interface ICompany {
+export interface Company {
   id?: string;
   logo?: string;
   name: string;
@@ -11,4 +11,12 @@ export interface ICompany {
   state: string;
   zip: string;
   ownerId: string;
+}
+
+export interface ShortCompany {
+  id: string;
+  name: string;
+  industry: string;
+  address: string;
+  city: string;
 }

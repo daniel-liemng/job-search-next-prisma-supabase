@@ -31,6 +31,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import CompanyDeleteModal from './CompanyDeleteModal';
+import CompanyInfoModal from './CompanyInfoModal';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -164,6 +165,7 @@ export function DataTable<TData, TValue>({
       </div>
 
       <CompanyDeleteModal />
+      <CompanyInfoModal />
     </>
   );
 }

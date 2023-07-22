@@ -14,19 +14,18 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { CompanyColumn } from './Columns';
-
 import { Button } from '@/components/ui/button';
 import { useCompanyModal } from '@/hooks/useCompanyModal';
+import { Company } from '@/types/company';
+import Link from 'next/link';
+// import { CompanyColumn } from './Columns';
 
 interface CellActionProps {
-  data: CompanyColumn;
+  data: Company;
 }
 
 const CellAction: React.FC<CellActionProps> = ({ data }) => {
-  const { onDelete } = useCompanyModal();
-
-  console.log('dada', data);
+  const { onDelete, onInfoOpen, onSelectedItem } = useCompanyModal();
 
   return (
     <div>
@@ -41,16 +40,19 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <div className='flex items-center'>
+            <div onClick={() => onInfoOpen(data)} className='flex items-center'>
               <HiOutlineInformationCircle className='mr-2 w-5 h-5' />
               Info
             </div>
           </DropdownMenuItem>
 
           <DropdownMenuItem>
-            <div className='flex items-center'>
+            <div
+              onClick={() => onSelectedItem(data)}
+              className='flex items-center'
+            >
               <HiOutlinePencilAlt className='mr-2 w-5 h-5' />
-              Edit
+              <Link href='/employer/company/create/?isEdit=true'>Edit</Link>
             </div>
           </DropdownMenuItem>
 

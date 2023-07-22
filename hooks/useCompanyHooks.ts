@@ -2,12 +2,19 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 import { queryClient } from '@/context/ReactQueryProvider';
-import { ICompany } from '@/types/company';
+import { Company } from '@/types/company';
 
 export const useCreateCompanyMutation = () =>
   useMutation({
-    mutationFn: async (companyData: ICompany) =>
+    mutationFn: async (companyData: Company) =>
       (await axios.post('/api/company', companyData)).data,
+    onSuccess: () => queryClient.invalidateQueries(['all-companies']),
+  });
+
+export const useUpdateCompanyMutation = () =>
+  useMutation({
+    mutationFn: async (companyData: Company) =>
+      (await axios.patch(`/api/company/${companyData.id}`, companyData)).data,
     onSuccess: () => queryClient.invalidateQueries(['all-companies']),
   });
 
@@ -15,6 +22,12 @@ export const useGetAllCompanies = () =>
   useQuery({
     queryKey: ['all-companies'],
     queryFn: async () => (await axios.get('/api/company')).data,
+  });
+
+export const useGetCompany = (companyId: string) =>
+  useQuery({
+    queryKey: ['company', companyId],
+    queryFn: async () => (await axios.get(`/api/company/${companyId}`)).data,
   });
 
 export const useDeleteCompanyMutation = () =>

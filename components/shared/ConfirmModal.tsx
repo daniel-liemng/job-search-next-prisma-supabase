@@ -9,6 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -31,7 +32,12 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
     <AlertDialog open={isOpen} onOpenChange={onChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogTitle>
+            <div className='flex items-center'>
+              <HiOutlineExclamationCircle className='mr-2 w-8 h-8 text-red-500' />
+              Are you sure?
+            </div>
+          </AlertDialogTitle>
         </AlertDialogHeader>
         <div>{children}</div>
       </AlertDialogContent>

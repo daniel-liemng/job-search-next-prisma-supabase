@@ -5,16 +5,17 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 
 import CellAction from './CellAction';
+import { Company } from '@/types/company';
 
-export type CompanyColumn = {
-  id: string;
-  name: string;
-  industry: string;
-  address: string;
-  city: string;
-};
+// export type CompanyColumn = {
+//   id: string;
+//   name: string;
+//   industry: string;
+//   address: string;
+//   city: string;
+// };
 
-export const columns: ColumnDef<CompanyColumn>[] = [
+export const columns: ColumnDef<Company>[] = [
   {
     id: 'select',
     header: ({ table }) => (
