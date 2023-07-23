@@ -8,13 +8,13 @@ import Breadcrumb from '@/components/shared/Breadcrumb';
 import Heading from '@/components/shared/Heading';
 import { Button } from '@/components/ui/button';
 
-import { useGetAllCompanies } from '@/hooks/useCompanyHooks';
+import { useGetAllCompaniesQuery } from '@/hooks/useCompanyHooks';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 import { HiPlus } from 'react-icons/hi';
 
 const EmployerCompanyPage = () => {
-  const { data: companies, isLoading, error } = useGetAllCompanies();
+  const { data: companies, isLoading, error } = useGetAllCompaniesQuery();
 
   // const convertedCompanies = companies?.map((com: Company) => ({
   //   id: com.id,

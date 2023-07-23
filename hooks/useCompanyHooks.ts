@@ -18,13 +18,13 @@ export const useUpdateCompanyMutation = () =>
     onSuccess: () => queryClient.invalidateQueries(['all-companies']),
   });
 
-export const useGetAllCompanies = () =>
+export const useGetAllCompaniesQuery = () =>
   useQuery({
     queryKey: ['all-companies'],
     queryFn: async () => (await axios.get('/api/company')).data,
   });
 
-export const useGetCompany = (companyId: string) =>
+export const useGetCompanyQuery = (companyId: string) =>
   useQuery({
     queryKey: ['company', companyId],
     queryFn: async () => (await axios.get(`/api/company/${companyId}`)).data,

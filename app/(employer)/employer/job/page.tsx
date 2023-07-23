@@ -10,12 +10,12 @@ import Breadcrumb from '@/components/shared/Breadcrumb';
 import Heading from '@/components/shared/Heading';
 import { Button } from '@/components/ui/button';
 
-import { useGetAllJobs } from '@/hooks/useJobHooks';
+import { useGetAllJobsQuery } from '@/hooks/useJobHooks';
 import { DataTable } from '@/components/employer/job/DataTable';
 import { columns } from '@/components/employer/job/Columns';
 
 const EmployerJobPage = () => {
-  const { data: jobs, isLoading, error } = useGetAllJobs();
+  const { data: jobs, isLoading, error } = useGetAllJobsQuery();
 
   if (error) {
     toast.error('Something went wrong');

@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb';
 
-export const POST = async (request: Request) => {
+export const PATCH = async (
+  request: Request,
+  { params }: { params: { jobId: string } }
+) => {
   try {
     const body = await request.json();
     const {
@@ -40,7 +43,10 @@ export const POST = async (request: Request) => {
       });
     }
 
-    const job = await prisma.job.create({
+    const job = await prisma.job.update({
+      where: {
+        id: params.jobId,
+      },
       data: {
         name,
         description,
@@ -58,24 +64,9 @@ export const POST = async (request: Request) => {
       },
     });
 
-    return NextResponse.json(job, { status: 201 });
+    return NextResponse.json(job, { status: 200 });
   } catch (err) {
-    console.log(`Company-Post Error: ${err}`);
-    return new NextResponse('Internal Error', { status: 500 });
-  }
-};
-
-export const GET = async (request: Request) => {
-  try {
-    const jobs = await prisma.job.findMany({
-      orderBy: {
-        name: 'asc',
-      },
-    });
-
-    return NextResponse.json(jobs);
-  } catch (err) {
-    console.log(`Job-GetAll Error: ${err}`);
+    console.log(`Job-Patch Error: ${err}`);
     return new NextResponse('Internal Error', { status: 500 });
   }
 };
