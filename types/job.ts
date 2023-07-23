@@ -11,6 +11,6 @@ export type Job = {
   startDate: Date;
   status: boolean;
   benefit: string;
-  categoryId?: string;
-  companyId?: string;
+  categoryId: string;
+  companyId: string;
 };

@@ -66,3 +66,18 @@ export const POST = async (request: Request) => {
     return new NextResponse('Internal Error', { status: 500 });
   }
 };
+
+export const GET = async (request: Request) => {
+  try {
+    const jobs = await prisma.job.findMany({
+      orderBy: {
+        name: 'asc',
+      },
+    });
+
+    return NextResponse.json(jobs);
+  } catch (err) {
+    console.log(`Job-GetAll Error: ${err}`);
+    return new NextResponse('Internal Error', { status: 500 });
+  }
+};

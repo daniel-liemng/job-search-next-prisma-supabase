@@ -5,9 +5,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 
 import CellAction from './CellAction';
-import { Company } from '@/types/company';
 
-export const columns: ColumnDef<Company>[] = [
+import { Job } from '@/types/job';
+
+export const columns: ColumnDef<Job>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -44,47 +45,48 @@ export const columns: ColumnDef<Company>[] = [
     },
   },
   {
-    accessorKey: 'industry',
+    accessorKey: 'categoryId',
     header: ({ column }) => {
       return (
         <Button
           variant='ghost'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Industry
+          Category
           <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
       );
     },
   },
   {
-    accessorKey: 'address',
+    accessorKey: 'companyId',
     header: ({ column }) => {
       return (
         <Button
           variant='ghost'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Address
+          Company
           <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
       );
     },
   },
   {
-    accessorKey: 'city',
+    accessorKey: 'location',
     header: ({ column }) => {
       return (
         <Button
           variant='ghost'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          City
+          Location
           <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
       );
     },
   },
+
   {
     id: 'actions',
     cell: ({ row }) => <CellAction data={row.original} />,

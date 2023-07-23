@@ -5,15 +5,17 @@ import { toast } from 'react-hot-toast';
 import { HiPlus } from 'react-icons/hi';
 
 import Loading from '@/components/Loading';
-import { columns } from '@/components/employer/company/Columns';
-import { DataTable } from '@/components/employer/company/DataTable';
+
 import Breadcrumb from '@/components/shared/Breadcrumb';
 import Heading from '@/components/shared/Heading';
 import { Button } from '@/components/ui/button';
-import { useGetAllCompanies } from '@/hooks/useCompanyHooks';
+
+import { useGetAllJobs } from '@/hooks/useJobHooks';
+import { DataTable } from '@/components/employer/job/DataTable';
+import { columns } from '@/components/employer/job/Columns';
 
 const EmployerJobPage = () => {
-  const { data: companies, isLoading, error } = useGetAllCompanies();
+  const { data: jobs, isLoading, error } = useGetAllJobs();
 
   if (error) {
     toast.error('Something went wrong');
@@ -36,7 +38,7 @@ const EmployerJobPage = () => {
         <Loading />
       ) : (
         <div className='mx-auto pt-6'>
-          <DataTable columns={columns} data={companies} />
+          <DataTable columns={columns} data={jobs} />
         </div>
       )}
     </div>

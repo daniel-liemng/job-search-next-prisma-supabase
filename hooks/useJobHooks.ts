@@ -10,3 +10,9 @@ export const useCreateJobMutation = () =>
       (await axios.post('/api/job', jobData)).data,
     // onSuccess: () => queryClient.invalidateQueries(['all-jobs']),
   });
+
+export const useGetAllJobs = () =>
+  useQuery({
+    queryKey: ['all-jobs'],
+    queryFn: async () => (await axios.get('/api/job')).data,
+  });
