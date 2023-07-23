@@ -149,7 +149,7 @@ const CompanyForm = () => {
       });
     }
 
-    toast.success(selectedItem ? 'Company Updated' : 'Company Created');
+    toast.success(isEdit ? 'Company Updated' : 'Company Created');
     form.reset();
     router.push('/employer/company');
   };
@@ -161,8 +161,8 @@ const CompanyForm = () => {
   return (
     <>
       <Heading
-        title={selectedItem ? 'Update company' : 'Create company'}
-        description={selectedItem ? 'Update a company' : 'Create a new company'}
+        title={isEdit ? 'Update company' : 'Create company'}
+        description={isEdit ? 'Update a company' : 'Create a new company'}
       />
       <div className='mt-5 flex gap-5'>
         <div className='grid w-full max-w-sm items-center gap-2'>

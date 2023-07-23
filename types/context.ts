@@ -1,5 +1,5 @@
-import { ICompany } from './company';
+import { Company } from './company';
 
 export type AppContextType = {
-  companies: ICompany[];
+  companies: Company[];
 };
