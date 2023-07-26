@@ -25,9 +25,10 @@ import Link from 'next/link';
 import {
   useCreateCompanyMutation,
   useGetAllCompanies,
+  useGetAllCompaniesQuery,
   useUpdateCompanyMutation,
 } from '@/hooks/useCompanyHooks';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useCompanyModal } from '@/hooks/useCompanyModal';
 import Heading from '@/components/shared/Heading';
 import {
@@ -47,8 +48,10 @@ import { CalendarIcon } from 'lucide-react';
 import { Job } from '@/types/job';
 import { useGetAllCategories } from '@/hooks/useCategoryHooks';
 import { Category } from '@/types/category';
-import { useCreateJobMutation } from '@/hooks/useJobHooks';
+import { useCreateJobMutation, useGetJobQuery } from '@/hooks/useJobHooks';
 import { Company } from '@/types/company';
+import { log } from 'console';
+import Loading from '@/components/Loading';
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -97,14 +100,22 @@ const JobForm = () => {
 
   const router = useRouter();
   const searchParams = useSearchParams();
+  const params = useParams();
   const isEdit = searchParams.get('isEdit');
 
   const { data: categories } = useGetAllCategories();
-  const { data: companies } = useGetAllCompanies();
+  const { data: companies } = useGetAllCompaniesQuery();
 
-  const { mutateAsync: createJob } = useCreateJobMutation();
-
-  let selectedItem: Job = {};
+  const {
+    mutateAsync: createJob,
+    isLoading: isCreateLoading,
+    error: creatingError,
+  } = useCreateJobMutation();
+  const {
+    data: job,
+    isLoading: isFetchLoading,
+    error: fetchingError,
+  } = useGetJobQuery(params.jobId as string);
 
   // const {
   //   mutateAsync: createComapny,
@@ -121,19 +132,19 @@ const JobForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: isEdit ? selectedItem?.name : '',
-      description: isEdit ? selectedItem?.description : '',
-      requirement: isEdit ? selectedItem?.requirement : '',
-      location: isEdit ? selectedItem?.location : '',
-      salary: isEdit ? selectedItem?.salary : '',
-      schedule: isEdit ? selectedItem?.schedule : '',
-      type: isEdit ? selectedItem?.type : '',
-      workType: isEdit ? selectedItem?.workType : '',
-      benefit: isEdit ? selectedItem?.benefit : '',
-      startDate: isEdit ? selectedItem?.startDate : new Date(),
+      name: isEdit ? job?.name : '',
+      description: isEdit ? job?.description : '',
+      requirement: isEdit ? job?.requirement : '',
+      location: isEdit ? job?.location : '',
+      salary: isEdit ? job?.salary : '',
+      schedule: isEdit ? job?.schedule : '',
+      type: isEdit ? job?.type : '',
+      workType: isEdit ? job?.workType : '',
+      benefit: isEdit ? job?.benefit : '',
+      startDate: isEdit ? job?.startDate : new Date(),
       status: 'true',
-      categoryId: isEdit ? selectedItem?.categoryId : '',
-      companyId: isEdit ? selectedItem?.companyId : '',
+      categoryId: isEdit ? job?.categoryId : '',
+      companyId: isEdit ? job?.companyId : '',
     },
   });
 
@@ -154,9 +165,16 @@ const JobForm = () => {
     router.push('/employer/job');
   };
 
-  // if (error) {
-  //   toast.error('Failed to save job');
-  // }
+  console.log('edit', isEdit);
+  console.log('job', job);
+
+  if (isFetchLoading) {
+    return <Loading />;
+  }
+
+  if (creatingError || fetchingError) {
+    return toast.error('Something went wrong');
+  }
 
   return (
     <>

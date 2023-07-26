@@ -1,6 +1,24 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb';
 
+export const GET = async (
+  request: Request,
+  { params }: { params: { jobId: string } }
+) => {
+  try {
+    const job = await prisma.job.findFirst({
+      where: {
+        id: params.jobId,
+      },
+    });
+
+    return NextResponse.json(job);
+  } catch (err) {
+    console.log(`Job-Get Error: ${err}`);
+    return new NextResponse('Internal Error', { status: 500 });
+  }
+};
+
 export const PATCH = async (
   request: Request,
   { params }: { params: { jobId: string } }

@@ -80,6 +80,9 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
   },
   debug: process.env.NODE_ENV === 'development',
+  pages: {
+    signIn: '/login',
+  },
 };
 
 const handler = NextAuth(authOptions);

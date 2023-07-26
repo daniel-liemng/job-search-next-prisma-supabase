@@ -9,7 +9,8 @@ import { useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
 
 const LoginPage = () => {
-  const session = useSession();
+  const [isRedirecting, setIsRedirecting] = useState(false);
+  const { data: session } = useSession();
   const router = useRouter();
 
   const [loginData, setLoginData] = useState({
@@ -18,11 +19,22 @@ const LoginPage = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
 
+  // useEffect(() => {
+  //   if (session?.status === 'authenticated') {
+  //     router.push('/employer/dashboard');
+  //   }
+  // }, []);
+
   useEffect(() => {
-    if (session?.status === 'authenticated') {
-      router.push('/dashboard');
+    if (session && !isRedirecting) {
+      // display some message to the user that he is being redirected
+      setIsRedirecting(true);
+      setTimeout(() => {
+        // redirect to the return url or home page
+        router.push('/employer/dashboard');
+      }, 2000);
     }
-  }, []);
+  }, [session, isRedirecting, router]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
