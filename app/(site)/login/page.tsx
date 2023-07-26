@@ -7,9 +7,12 @@ import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
 import Loading from '@/components/Loading';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Mail } from 'lucide-react';
 
 const LoginPage = () => {
-  const [isRedirecting, setIsRedirecting] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -19,22 +22,11 @@ const LoginPage = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //   if (session?.status === 'authenticated') {
-  //     router.push('/employer/dashboard');
-  //   }
-  // }, []);
-
   useEffect(() => {
-    if (session && !isRedirecting) {
-      // display some message to the user that he is being redirected
-      setIsRedirecting(true);
-      setTimeout(() => {
-        // redirect to the return url or home page
-        router.push('/employer/dashboard');
-      }, 2000);
+    if (session) {
+      router.push('/employer/dashboard');
     }
-  }, [session, isRedirecting, router]);
+  }, [session, router]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -80,64 +72,33 @@ const LoginPage = () => {
 
       <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
         <form onSubmit={handleLoginSubmit} className='space-y-6'>
-          <div>
-            <label
-              htmlFor='email'
-              className='block text-sm font-medium leading-6 text-gray-900'
-            >
-              Email address
-            </label>
-            <div className='mt-2'>
-              <input
-                id='email'
-                name='email'
-                value={loginData.email}
-                onChange={handleChange}
-                type='email'
-                // required
-                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-              />
-            </div>
+          <div className='grid w-full max-w-sm items-center gap-1.5'>
+            <Label htmlFor='email'>Email</Label>
+            <Input
+              type='email'
+              id='email'
+              placeholder='Email address'
+              name='email'
+              value={loginData.email}
+              onChange={handleChange}
+            />
           </div>
 
-          <div>
-            <div className='flex items-center justify-between'>
-              <label
-                htmlFor='password'
-                className='block text-sm font-medium leading-6 text-gray-900'
-              >
-                Password
-              </label>
-              <div className='text-sm'>
-                <a
-                  href='#'
-                  className='font-semibold text-indigo-600 hover:text-indigo-500'
-                >
-                  Forgot password?
-                </a>
-              </div>
-            </div>
-            <div className='mt-2'>
-              <input
-                id='password'
-                name='password'
-                value={loginData.password}
-                onChange={handleChange}
-                type='password'
-                // required
-                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-              />
-            </div>
+          <div className='grid w-full max-w-sm items-center gap-1.5'>
+            <Label htmlFor='password'>Password</Label>
+            <Input
+              type='password'
+              id='password'
+              placeholder='Password'
+              name='password'
+              value={loginData.password}
+              onChange={handleChange}
+            />
           </div>
 
-          <div>
-            <button
-              type='submit'
-              className='flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
-            >
-              Sign in
-            </button>
-          </div>
+          <Button type='submit' className='w-full'>
+            <Mail className='mr-2 h-4 w-4' /> Login with Email
+          </Button>
         </form>
 
         <div className='inline-flex items-center justify-center w-full'>
@@ -147,10 +108,11 @@ const LoginPage = () => {
           </span>
         </div>
 
-        <button
-          onClick={() => signIn('github')}
+        <Button
           type='button'
-          className='w-full text-black bg-white border border-gray-400 hover:bg-indigo-600 hover:text-white focus:outline-none font-medium rounded-lg text-sm px-5 py-1.5 text-center inline-flex items-center justify-center   mr-2 mb-2'
+          onClick={() => signIn('github')}
+          className='w-full'
+          variant='outline'
         >
           <svg
             className='w-4 h-4 mr-2'
@@ -166,12 +128,13 @@ const LoginPage = () => {
             />
           </svg>
           Sign in with Github
-        </button>
+        </Button>
 
-        <button
-          onClick={() => signIn('google')}
+        <Button
           type='button'
-          className='text-black bg-white hover:bg-indigo-600 hover:text-white  focus:outline-none font-medium rounded-lg text-sm px-5 py-1.5 text-center inline-flex items-center justify-center mr-2 mb-2 border border-gray-400 w-full mt-2'
+          onClick={() => signIn('google')}
+          className='w-full mt-5'
+          variant='outline'
         >
           <svg
             className='w-4 h-4 mr-2'
@@ -187,7 +150,7 @@ const LoginPage = () => {
             />
           </svg>
           Sign in with Google
-        </button>
+        </Button>
 
         <p className='mt-10 text-center text-sm text-gray-500'>
           Not a member?{' '}

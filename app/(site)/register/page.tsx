@@ -7,9 +7,13 @@ import axios from 'axios';
 import Loading from '@/components/Loading';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Mail } from 'lucide-react';
 
 const RegisterPage = () => {
-  const session = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
 
   const [registerData, setRegisterData] = useState({
@@ -21,10 +25,10 @@ const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (session?.status === 'authenticated') {
-      router.push('/dashboard');
+    if (session) {
+      router.push('/employer/dashboard');
     }
-  }, []);
+  }, [session, router]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -66,101 +70,57 @@ const RegisterPage = () => {
 
       <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
         <form onSubmit={handleRegisterSubmit} className='space-y-6'>
-          <div>
-            <label
-              htmlFor='name'
-              className='block text-sm font-medium leading-6 text-gray-900'
-            >
-              Name
-            </label>
-            <div className='mt-2'>
-              <input
-                id='name'
-                name='name'
-                value={registerData.name}
-                onChange={handleChange}
-                type='text'
-                // required
-                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-              />
-            </div>
+          <div className='grid w-full max-w-sm items-center gap-1.5'>
+            <Label htmlFor='name'>Name</Label>
+            <Input
+              type='text'
+              id='name'
+              placeholder='Name'
+              name='name'
+              value={registerData.name}
+              onChange={handleChange}
+            />
           </div>
 
-          <div>
-            <label
-              htmlFor='email'
-              className='block text-sm font-medium leading-6 text-gray-900'
-            >
-              Email address
-            </label>
-            <div className='mt-2'>
-              <input
-                id='email'
-                name='email'
-                value={registerData.email}
-                onChange={handleChange}
-                type='email'
-                autoComplete='email'
-                // required
-                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-              />
-            </div>
+          <div className='grid w-full max-w-sm items-center gap-1.5'>
+            <Label htmlFor='email'>Email</Label>
+            <Input
+              type='email'
+              id='email'
+              placeholder='Email address'
+              name='email'
+              value={registerData.email}
+              onChange={handleChange}
+            />
           </div>
 
-          <div>
-            <div className='flex items-center justify-between'>
-              <label
-                htmlFor='password'
-                className='block text-sm font-medium leading-6 text-gray-900'
-              >
-                Password
-              </label>
-            </div>
-
-            <div className='mt-2'>
-              <input
-                id='password'
-                name='password'
-                value={registerData.password}
-                onChange={handleChange}
-                type='password'
-                // required
-                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-              />
-            </div>
+          <div className='grid w-full max-w-sm items-center gap-1.5'>
+            <Label htmlFor='password'>Password</Label>
+            <Input
+              type='password'
+              id='password'
+              placeholder='Password'
+              name='password'
+              value={registerData.password}
+              onChange={handleChange}
+            />
           </div>
 
-          <div>
-            <div className='flex items-center justify-between'>
-              <label
-                htmlFor='password2'
-                className='block text-sm font-medium leading-6 text-gray-900'
-              >
-                Confirm password
-              </label>
-            </div>
-
-            <div className='mt-2'>
-              <input
-                id='password2'
-                name='password2'
-                value={registerData.password2}
-                onChange={handleChange}
-                type='password'
-                // required
-                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-              />
-            </div>
+          <div className='grid w-full max-w-sm items-center gap-1.5'>
+            <Label htmlFor='password2'>Confirm password</Label>
+            <Input
+              type='password'
+              id='password2'
+              placeholder='Confirm password'
+              name='password2'
+              value={registerData.password2}
+              onChange={handleChange}
+            />
           </div>
 
-          <div>
-            <button
-              type='submit'
-              className='flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
-            >
-              Sign Up
-            </button>
-          </div>
+          <Button type='submit' className='w-full'>
+            Register
+          </Button>
         </form>
 
         <p className='mt-10 text-center text-sm text-gray-500'>
