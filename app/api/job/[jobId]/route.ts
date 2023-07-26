@@ -10,6 +10,10 @@ export const GET = async (
       where: {
         id: params.jobId,
       },
+      include: {
+        category: true,
+        company: true,
+      },
     });
 
     return NextResponse.json(job);
