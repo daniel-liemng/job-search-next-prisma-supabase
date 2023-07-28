@@ -18,12 +18,16 @@ import { Button } from '@/components/ui/button';
 
 import Link from 'next/link';
 import { Job } from '@/types/job';
+import { useJobModal } from '@/hooks/useJobModal';
+import JobDeleteModal from './JobDeleteModal';
 
 interface CellActionProps {
   data: Job;
 }
 
 const CellAction: React.FC<CellActionProps> = ({ data }) => {
+  const { onDeleteOpen } = useJobModal();
+
   return (
     <div>
       <DropdownMenu>
@@ -57,13 +61,18 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </DropdownMenuItem>
 
           <DropdownMenuItem>
-            <div className='flex items-center'>
+            <div
+              onClick={() => onDeleteOpen(data)}
+              className='flex items-center'
+            >
               <HiOutlineTrash className='mr-2 w-5 h-5' />
               Delete
             </div>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <JobDeleteModal />
     </div>
   );
 };

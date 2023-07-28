@@ -29,3 +29,10 @@ export const useUpdateJobMutation = () =>
       (await axios.patch(`/api/job/${jobData.id}`, jobData)).data,
     onSuccess: () => queryClient.invalidateQueries(['all-jobs']),
   });
+
+export const useDeleteJobMutation = () =>
+  useMutation({
+    mutationFn: async (jobId: string) =>
+      (await axios.delete(`/api/job/${jobId}`)).data,
+    onSuccess: () => queryClient.invalidateQueries(['all-jobs']),
+  });

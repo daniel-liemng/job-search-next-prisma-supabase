@@ -1,4 +1,4 @@
-import { Company, ShortCompany } from '@/types/company';
+import { Company } from '@/types/company';
 import { create } from 'zustand';
 
 interface useCompanyModalStore {

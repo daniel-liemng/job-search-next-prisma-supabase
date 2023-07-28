@@ -78,14 +78,14 @@ const EmployerJobDetailsPage = () => {
             <p className='font-semibold'>Job type</p>
           </div>
           <div className='col-span-4'>
-            <p>{job?.type}</p>
+            <p className='capitalize'>{job?.type}</p>
           </div>
 
           <div className='col-span-2'>
             <p className='font-semibold'>Work type</p>
           </div>
           <div className='col-span-4'>
-            <p>{job?.workType}</p>
+            <p className='capitalize'>{job?.workType}</p>
           </div>
 
           <div className='col-span-2'>
@@ -117,7 +117,7 @@ const EmployerJobDetailsPage = () => {
           </div>
 
           <div className='col-span-2'>
-            <p className='font-semibold'>Benefits</p>
+            <p className='font-semibold'>Benefit</p>
           </div>
           <div className='col-span-4'>
             <p>{job?.benefit}</p>

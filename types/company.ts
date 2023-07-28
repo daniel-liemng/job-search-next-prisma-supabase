@@ -13,10 +13,10 @@ export type Company = {
   ownerId: string;
 };
 
-export interface ShortCompany {
-  id: string;
-  name: string;
-  industry: string;
-  address: string;
-  city: string;
-}
+// export interface ShortCompany {
+//   id: string;
+//   name: string;
+//   industry: string;
+//   address: string;
+//   city: string;
+// }

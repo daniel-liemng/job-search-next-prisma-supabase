@@ -92,3 +92,21 @@ export const PATCH = async (
     return new NextResponse('Internal Error', { status: 500 });
   }
 };
+
+export const DELETE = async (
+  request: Request,
+  { params }: { params: { jobId: string } }
+) => {
+  try {
+    await prisma.job.delete({
+      where: {
+        id: params.jobId,
+      },
+    });
+
+    return new NextResponse('Job Deleted');
+  } catch (err) {
+    console.log(`Job-Delete Error: ${err}`);
+    return new NextResponse('Internal Error', { status: 500 });
+  }
+};
