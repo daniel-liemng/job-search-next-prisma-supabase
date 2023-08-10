@@ -108,8 +108,8 @@ model Job {
   workType    String?
   schedule    String?
   benefit     String?
+  status      Boolean
   startDate   String?
-  status      Boolean  @default(true)
   companyId   String
   categoryId  String
   createdAt   DateTime @default(now())

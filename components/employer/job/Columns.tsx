@@ -45,7 +45,7 @@ export const columns: ColumnDef<Job>[] = [
     },
   },
   {
-    accessorKey: 'categoryId',
+    accessorKey: 'category.name',
     header: ({ column }) => {
       return (
         <Button
@@ -59,7 +59,7 @@ export const columns: ColumnDef<Job>[] = [
     },
   },
   {
-    accessorKey: 'companyId',
+    accessorKey: 'company.name',
     header: ({ column }) => {
       return (
         <Button

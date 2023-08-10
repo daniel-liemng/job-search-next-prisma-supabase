@@ -2,7 +2,7 @@
 
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
+import { format, toDate } from 'date-fns';
 
 import { useForm } from 'react-hook-form';
 import { cn } from '@/lib/utils';
@@ -24,7 +24,6 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import {
   useCreateCompanyMutation,
-  useGetAllCompanies,
   useGetAllCompaniesQuery,
   useUpdateCompanyMutation,
 } from '@/hooks/useCompanyHooks';
@@ -48,10 +47,16 @@ import { CalendarIcon } from 'lucide-react';
 import { Job } from '@/types/job';
 import { useGetAllCategories } from '@/hooks/useCategoryHooks';
 import { Category } from '@/types/category';
-import { useCreateJobMutation, useGetJobQuery } from '@/hooks/useJobHooks';
+import {
+  useCreateJobMutation,
+  useGetJobQuery,
+  useUpdateJobMutation,
+} from '@/hooks/useJobHooks';
 import { Company } from '@/types/company';
-import { log } from 'console';
+
 import Loading from '@/components/Loading';
+import { useEffect } from 'react';
+import { useJobModal } from '@/hooks/useJobModal';
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -96,83 +101,71 @@ const formSchema = z.object({
 });
 
 const JobForm = () => {
-  const { data: session } = useSession();
-
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const params = useParams();
-  const isEdit = searchParams.get('isEdit');
 
   const { data: categories } = useGetAllCategories();
   const { data: companies } = useGetAllCompaniesQuery();
 
+  const { selectedItem, isEdit, onResetEdit } = useJobModal();
+
   const {
     mutateAsync: createJob,
     isLoading: isCreateLoading,
-    error: creatingError,
+    error: createError,
   } = useCreateJobMutation();
+
   const {
-    data: job,
-    isLoading: isFetchLoading,
-    error: fetchingError,
-  } = useGetJobQuery(params.jobId as string);
-
-  // const {
-  //   mutateAsync: createComapny,
-  //   isLoading,
-  //   error,
-  // } = useCreateCompanyMutation();
-
-  // const {
-  //   mutateAsync: updateComapny,
-  //   isLoading: isUpdateLoading,
-  //   error: isUpdateError,
-  // } = useUpdateCompanyMutation();
+    mutateAsync: updateJob,
+    isLoading: isUpdateLoading,
+    error: updateError,
+  } = useUpdateJobMutation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: isEdit ? job?.name : '',
-      description: isEdit ? job?.description : '',
-      requirement: isEdit ? job?.requirement : '',
-      location: isEdit ? job?.location : '',
-      salary: isEdit ? job?.salary : '',
-      schedule: isEdit ? job?.schedule : '',
-      type: isEdit ? job?.type : '',
-      workType: isEdit ? job?.workType : '',
-      benefit: isEdit ? job?.benefit : '',
-      startDate: isEdit ? job?.startDate : new Date(),
-      status: 'true',
-      categoryId: isEdit ? job?.categoryId : '',
-      companyId: isEdit ? job?.companyId : '',
+      name: isEdit ? selectedItem?.name : '',
+      description: isEdit ? selectedItem?.description : '',
+      requirement: isEdit ? selectedItem?.requirement : '',
+      location: isEdit ? selectedItem?.location : '',
+      salary: isEdit ? selectedItem?.salary : '',
+      schedule: isEdit ? selectedItem?.schedule : '',
+      type: isEdit ? selectedItem?.type : '',
+      workType: isEdit ? selectedItem?.workType : '',
+      benefit: isEdit ? selectedItem?.benefit : '',
+      startDate: isEdit ? new Date(selectedItem?.startDate!) : new Date(),
+      status: isEdit ? selectedItem?.status.toString() : 'true',
+      categoryId: isEdit ? selectedItem?.categoryId : '',
+      companyId: isEdit ? selectedItem?.companyId : '',
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    console.log('VALUES', values);
 
     if (isEdit) {
-      console.log('Edit');
+      await updateJob({
+        jobData: {
+          ...values,
+          status: values.status === 'true' ? true : false,
+        },
+        jobId: selectedItem?.id,
+      });
     } else {
       await createJob({
         ...values,
-        status: 'true' ? true : false,
+        status: values.status === 'true' ? true : false,
       });
     }
 
     toast.success(isEdit ? 'Job Updated' : 'Job Created');
     form.reset();
+    onResetEdit();
     router.push('/employer/job');
   };
 
-  console.log('edit', isEdit);
-  console.log('job', job);
+  console.log('9999', { selectedItem, isEdit });
 
-  if (isFetchLoading) {
-    return <Loading />;
-  }
-
-  if (creatingError || fetchingError) {
+  if (createError || updateError) {
     return toast.error('Something went wrong');
   }
 
@@ -506,7 +499,12 @@ const JobForm = () => {
               <Button type='button' variant='outline' asChild>
                 <Link href='/employer/job'>Cancel</Link>
               </Button>
-              <Button type='submit'>Save</Button>
+              <Button
+                type='submit'
+                disabled={isCreateLoading || isUpdateLoading}
+              >
+                Save
+              </Button>
             </div>
           </form>
         </Form>

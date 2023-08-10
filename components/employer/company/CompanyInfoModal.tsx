@@ -6,6 +6,8 @@ import { useCompanyModal } from '@/hooks/useCompanyModal';
 const CompanyInfoModal = () => {
   const { isInfoOpen, onInfoClose, selectedItem } = useCompanyModal();
 
+  console.log(selectedItem);
+
   return (
     <Modal
       title='Company Information'

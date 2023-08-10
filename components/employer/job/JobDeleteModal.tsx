@@ -16,8 +16,6 @@ const JobDeleteModal = () => {
     onDeleteClose();
   };
 
-  console.log('8880', selectedItem);
-
   return (
     <ConfirmModal isOpen={isDeleteOpen} onClose={onDeleteClose}>
       <p className='mt-3'>

@@ -252,7 +252,7 @@ const CompanyForm = () => {
                     <FormItem>
                       <FormLabel>Capacity</FormLabel>
                       <FormControl>
-                        <Input placeholder='capacity' {...field} />
+                        <Input placeholder='Capacity' {...field} />
                       </FormControl>
 
                       <FormMessage />

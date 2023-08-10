@@ -25,8 +25,13 @@ export const useGetJobQuery = (jobId: string) =>
 
 export const useUpdateJobMutation = () =>
   useMutation({
-    mutationFn: async (jobData: Job) =>
-      (await axios.patch(`/api/job/${jobData.id}`, jobData)).data,
+    mutationFn: async ({
+      jobData,
+      jobId,
+    }: {
+      jobData: Job;
+      jobId: string | undefined;
+    }) => (await axios.put(`/api/job/${jobId}`, jobData)).data,
     onSuccess: () => queryClient.invalidateQueries(['all-jobs']),
   });
 

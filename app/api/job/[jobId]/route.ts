@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb';
+import { log } from 'console';
 
 export const GET = async (
   request: Request,
@@ -23,12 +24,13 @@ export const GET = async (
   }
 };
 
-export const PATCH = async (
+export const PUT = async (
   request: Request,
   { params }: { params: { jobId: string } }
 ) => {
   try {
     const body = await request.json();
+
     const {
       name,
       description,
@@ -57,7 +59,6 @@ export const PATCH = async (
       !startDate ||
       !categoryId ||
       !companyId ||
-      !status ||
       !benefit
     ) {
       return new NextResponse('Please enter all required fields.', {
