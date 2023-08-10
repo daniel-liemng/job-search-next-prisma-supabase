@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 import Modal from '@/components/shared/Modal';
 import { useCompanyModal } from '@/hooks/useCompanyModal';
 

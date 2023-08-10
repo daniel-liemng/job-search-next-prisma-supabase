@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
@@ -47,6 +48,7 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.10.1",
     "react-spinners": "^0.13.8",
+    "supports-color": "^8.1.1",
     "tailwind-merge": "^1.14.0",
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.6",
@@ -59,6 +61,7 @@
     "@tailwindcss/forms": "^0.5.4",
     "@types/bcrypt": "^5.0.0",
     "@types/uuid": "^9.0.2",
+    "encoding": "^0.1.13",
     "prisma": "^5.0.0"
   }
 }

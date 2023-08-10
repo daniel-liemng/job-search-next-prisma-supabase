@@ -7,9 +7,6 @@ import Breadcrumb from '@/components/shared/Breadcrumb';
 import Heading from '@/components/shared/Heading';
 import { useGetAllCategories } from '@/hooks/useCategoryHooks';
 import { Category } from '@/types/category';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 
 const EmployerCategoryPage = () => {

@@ -16,14 +16,6 @@ import { HiPlus } from 'react-icons/hi';
 const EmployerCompanyPage = () => {
   const { data: companies, isLoading, error } = useGetAllCompaniesQuery();
 
-  // const convertedCompanies = companies?.map((com: Company) => ({
-  //   id: com.id,
-  //   name: com.name,
-  //   industry: com.industry,
-  //   address: com.address,
-  //   city: com.city,
-  // }));
-
   if (error) {
     toast.error('Something went wrong');
   }
