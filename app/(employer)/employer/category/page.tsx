@@ -7,6 +7,9 @@ import Breadcrumb from '@/components/shared/Breadcrumb';
 import Heading from '@/components/shared/Heading';
 import { useGetAllCategories } from '@/hooks/useCategoryHooks';
 import { Category } from '@/types/category';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 
 const EmployerCategoryPage = () => {
@@ -16,6 +19,10 @@ const EmployerCategoryPage = () => {
     id: cat.id,
     name: cat.name,
   }));
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   if (error) {
     toast.error('Something went wrong');

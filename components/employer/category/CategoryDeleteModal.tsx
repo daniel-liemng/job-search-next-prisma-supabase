@@ -2,7 +2,6 @@ import ConfirmModal from '@/components/shared/ConfirmModal';
 import { Button } from '@/components/ui/button';
 import { useDeleteCategoryMutation } from '@/hooks/useCategoryHooks';
 import { useCategoryModal } from '@/hooks/useCategoryModal';
-import React from 'react';
 import { toast } from 'react-hot-toast';
 
 const CategoryDeleteModal = () => {

@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Mail } from 'lucide-react';
 
+// Not used this page - HomePage / for Login
 const LoginPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
@@ -113,6 +114,7 @@ const LoginPage = () => {
           onClick={() => signIn('github')}
           className='w-full'
           variant='outline'
+          disabled
         >
           <svg
             className='w-4 h-4 mr-2'

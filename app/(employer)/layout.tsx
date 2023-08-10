@@ -18,7 +18,7 @@ const EmployerLayout = ({ children }: { children: React.ReactNode }) => {
 
     if (unAuthorized) {
       console.log('not authorized');
-      router.push('/login');
+      router.push('/');
     }
   }, [loading, unAuthorized, sessionStatus, router]);
 

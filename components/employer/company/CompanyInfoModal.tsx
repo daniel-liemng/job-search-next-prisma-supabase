@@ -15,7 +15,7 @@ const CompanyInfoModal = () => {
       onClose={onInfoClose}
     >
       <div className='flex items-center gap-3'>
-        <Image
+        <img
           src={selectedItem?.logo!}
           alt={selectedItem?.name!}
           width={80}

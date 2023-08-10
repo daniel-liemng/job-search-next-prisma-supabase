@@ -24,5 +24,5 @@ export const useCompanyModal = create<useCompanyModalStore>((set) => ({
   onResetSelectetedItem: () => set({ selectedItem: undefined }),
   onDelete: (company) => set({ isDeleteOpen: true, selectedItem: company }),
   onInfoOpen: (company) => set({ isInfoOpen: true, selectedItem: company }),
-  onInfoClose: () => set({ isInfoOpen: false }),
+  onInfoClose: () => set({ isInfoOpen: false, selectedItem: undefined }),
 }));

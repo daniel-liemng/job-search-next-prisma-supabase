@@ -2,7 +2,7 @@
 
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { format, toDate } from 'date-fns';
+import { format } from 'date-fns';
 
 import { useForm } from 'react-hook-form';
 import { cn } from '@/lib/utils';
@@ -22,12 +22,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import {
-  useCreateCompanyMutation,
-  useGetAllCompaniesQuery,
-  useUpdateCompanyMutation,
-} from '@/hooks/useCompanyHooks';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useGetAllCompaniesQuery } from '@/hooks/useCompanyHooks';
+import { useParams, useRouter } from 'next/navigation';
 import { useCompanyModal } from '@/hooks/useCompanyModal';
 import Heading from '@/components/shared/Heading';
 import {
@@ -55,7 +51,7 @@ import {
 import { Company } from '@/types/company';
 
 import Loading from '@/components/Loading';
-import { useEffect } from 'react';
+
 import { useJobModal } from '@/hooks/useJobModal';
 
 const formSchema = z.object({
@@ -163,7 +159,9 @@ const JobForm = () => {
     router.push('/employer/job');
   };
 
-  console.log('9999', { selectedItem, isEdit });
+  if (isCreateLoading || isUpdateLoading) {
+    return <Loading />;
+  }
 
   if (createError || updateError) {
     return toast.error('Something went wrong');
