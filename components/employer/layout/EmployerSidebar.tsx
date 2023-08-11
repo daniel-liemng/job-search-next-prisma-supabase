@@ -17,6 +17,7 @@ import { usePathname } from 'next/navigation';
 
 import { cn } from '@/lib/utils';
 import { useTheme } from 'next-themes';
+import { signOut } from 'next-auth/react';
 
 const EmployerSidebar = ({
   className,
@@ -113,7 +114,10 @@ const EmployerSidebar = ({
           <p className='text-lg font-medium transition-colors'>Light Mode</p>
         </div>
 
-        <div className='flex gap-2 items-center p-2 rounded-md text-lg font-medium transition-colors cursor-pointer hover:bg-gray-100 dark:hover:text-black'>
+        <div
+          onClick={() => signOut()}
+          className='flex gap-2 items-center p-2 rounded-md text-lg font-medium transition-colors cursor-pointer hover:bg-gray-100 dark:hover:text-black'
+        >
           <HiOutlineLogout className='h-6 w-6' />
           <p className='text-lg font-medium transition-colors'>Sign Out</p>
         </div>
