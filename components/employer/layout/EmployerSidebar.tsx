@@ -8,18 +8,22 @@ import {
   HiOutlineCube,
   HiOutlineLibrary,
   HiOutlineViewGrid,
+  HiOutlineLogout,
+  HiOutlineMoon,
+  HiOutlineSun,
 } from 'react-icons/hi';
 import Link from 'next/link';
-import { useParams, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 import { cn } from '@/lib/utils';
+import { useTheme } from 'next-themes';
 
 const EmployerSidebar = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) => {
   const pathname = usePathname();
-  const params = useParams();
+  const { setTheme } = useTheme();
 
   const routes = [
     {
@@ -73,10 +77,8 @@ const EmployerSidebar = ({
         {routes.map((route) => (
           <div
             className={cn(
-              'flex gap-2 items-center p-2 rounded-md text-lg font-medium transition-colors hover:bg-gray-100',
-              route.active
-                ? 'text-black bg-gray-200 dark:text-white '
-                : 'text-muted-foreground'
+              'flex gap-2 items-center p-2 rounded-md text-lg font-medium transition-colors hover:bg-gray-100 dark:hover:text-black',
+              route.active ? 'text-black bg-gray-200' : 'text-muted-foreground'
             )}
             key={route.href}
           >
@@ -85,15 +87,36 @@ const EmployerSidebar = ({
               href={route.href}
               className={cn(
                 'text-lg font-medium transition-colors',
-                route.active
-                  ? 'text-black dark:text-white '
-                  : 'text-muted-foreground'
+                route.active ? 'text-black' : 'text-muted-foreground'
               )}
             >
               {route.label}
             </Link>
           </div>
         ))}
+
+        {/* DARK */}
+        <div
+          onClick={() => setTheme('dark')}
+          className='dark:hidden flex gap-2 items-center p-2 rounded-md text-lg font-medium transition-colors cursor-pointer hover:bg-gray-100 dark:hover:text-black'
+        >
+          <HiOutlineMoon className='h-6 w-6' />
+          <p className='text-lg font-medium transition-colors'>Dark Mode</p>
+        </div>
+
+        {/* LIGHT */}
+        <div
+          onClick={() => setTheme('light')}
+          className='hidden dark:flex gap-2 items-center p-2 rounded-md text-lg font-medium transition-colors cursor-pointer hover:bg-gray-100 dark:hover:text-black'
+        >
+          <HiOutlineSun className='h-6 w-6' />
+          <p className='text-lg font-medium transition-colors'>Light Mode</p>
+        </div>
+
+        <div className='flex gap-2 items-center p-2 rounded-md text-lg font-medium transition-colors cursor-pointer hover:bg-gray-100 dark:hover:text-black'>
+          <HiOutlineLogout className='h-6 w-6' />
+          <p className='text-lg font-medium transition-colors'>Sign Out</p>
+        </div>
       </nav>
     </aside>
   );
