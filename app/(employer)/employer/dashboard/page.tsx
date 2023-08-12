@@ -11,8 +11,8 @@ import { useGetAllCompaniesQuery } from '@/hooks/useCompanyHooks';
 import { useGetAllCategories } from '@/hooks/useCategoryHooks';
 import { useGetAllJobsQuery } from '@/hooks/useJobHooks';
 import PieChartComponent from '@/components/employer/dashboard/PieChartComponent';
-import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import { Job } from '@/types/job';
+import BarChartComponent from '@/components/employer/dashboard/BarChartComponent';
 
 const EmployerDashboardPage = () => {
   const { data: company } = useGetAllCompaniesQuery();
@@ -22,13 +22,11 @@ const EmployerDashboardPage = () => {
   const activeJobs = job?.filter((job: Job) => job.status == true).length;
   const inactiveJobs = job?.filter((job: Job) => job.status == false).length;
 
-  const data = [
-    { name: 'Active', value: 6 },
-    { name: 'Inactive', value: 4 },
-  ];
-
-  console.log('777', activeJobs);
-  console.log('777', inactiveJobs);
+  const monthJobCountArr = new Array(12).fill(0);
+  job?.forEach(
+    ({ startDate }: { startDate: string }) =>
+      (monthJobCountArr[new Date(startDate).getMonth()] += 1)
+  );
 
   return (
     <>
@@ -52,12 +50,16 @@ const EmployerDashboardPage = () => {
 
       <div className='p-5'>
         <div className='w-[250px] h-[250px]'>
-          <h2 className='text-2xl mb-2 text-center'>Jobs</h2>
+          <h2 className='text-xl mb-2 text-center'>Jobs</h2>
           <PieChartComponent
             activeJobs={activeJobs}
             inactiveJobs={inactiveJobs}
           />
         </div>
+      </div>
+
+      <div className='p-5 w-full h-[400px]'>
+        <BarChartComponent jobData={monthJobCountArr} />
       </div>
     </>
   );
