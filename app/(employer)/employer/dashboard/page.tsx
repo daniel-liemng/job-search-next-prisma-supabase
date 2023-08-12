@@ -48,7 +48,7 @@ const EmployerDashboardPage = () => {
         />
       </div>
 
-      <div className='p-5'>
+      <div className='p-5 flex gap-3 flex-wrap'>
         <div className='w-[250px] h-[250px]'>
           <h2 className='text-xl mb-2 text-center'>Jobs</h2>
           <PieChartComponent
@@ -56,10 +56,10 @@ const EmployerDashboardPage = () => {
             inactiveJobs={inactiveJobs}
           />
         </div>
-      </div>
 
-      <div className='p-5 w-full h-[400px]'>
-        <BarChartComponent jobData={monthJobCountArr} />
+        <div className='flex-1 w-full h-[400px]'>
+          <BarChartComponent jobData={monthJobCountArr} />
+        </div>
       </div>
     </>
   );
