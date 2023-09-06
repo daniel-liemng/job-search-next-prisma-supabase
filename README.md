@@ -22,7 +22,10 @@ A dashboard web application for employers to manage the company, category, and j
 
 ## Screenshots
 
-![App Screenshot](https://github.com/daniel-liemng/task_manager_react/blob/main/screenshot/task-manager-photo.png)
+![App Screenshot](https://github.com/daniel-liemng/job-search-next-prisma-supabase/blob/master/public/screenshot/dashboard_home.png)
+![App Screenshot](https://github.com/daniel-liemng/job-search-next-prisma-supabase/blob/master/public/screenshot/dashboard_createCompany.png)
+![App Screenshot](https://github.com/daniel-liemng/job-search-next-prisma-supabase/blob/master/public/screenshot/dashboard_createJob.png)
+![App Screenshot](https://github.com/daniel-liemng/job-search-next-prisma-supabase/blob/master/public/screenshot/dashboard_jobs.png)
 
 ## Installation
 
